@@ -8,6 +8,9 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: clish-tec-transcribe
     steps:
       - uses: actions/checkout@v4
 
@@ -34,4 +37,4 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: Clish-Tec-Transcribe-Windows
-          path: Clish-Tec-Transcribe-Windows.zip
+          path: clish-tec-transcribe/Clish-Tec-Transcribe-Windows.zip
