@@ -1,0 +1,37 @@
+name: Build Clish Tec Transcribe EXE
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt pyinstaller
+
+      - name: Build EXE
+        run: >
+          pyinstaller --noconfirm --windowed --name "Clish Tec Transcribe"
+          --collect-all faster_whisper --collect-all ctranslate2 --collect-all av
+          --collect-all obsws_python --collect-all sounddevice --collect-all _sounddevice_data
+          clish_tec_transcribe.py
+
+      - name: Zip
+        shell: pwsh
+        run: Compress-Archive -Path "dist/Clish Tec Transcribe" -DestinationPath "Clish-Tec-Transcribe-Windows.zip"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Clish-Tec-Transcribe-Windows
+          path: Clish-Tec-Transcribe-Windows.zip
